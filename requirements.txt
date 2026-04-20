@@ -1,0 +1,8 @@
+# Libraries
+
+grog
+speechRecognition
+pyttsx3
+pyaudio
+python-dotenv
+streamlit
