@@ -1,8 +1,8 @@
 # Libraries
 
-grog
-speechRecognition
+groq
+SpeechRecognition
 pyttsx3
-pyaudio
+# pyaudio
 python-dotenv
 streamlit
