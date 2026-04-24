@@ -94,6 +94,9 @@ def speak(text,voice_gender="girl"):
 
     
 def listen_to_speech():
+
+    if IS_CLOUD:   #extra added
+        return None   # 👈 stop mic usage in cloud  extra added
     try:
         with sr.Microphone() as source:                        #allowing the microphone to listen from user
             recognizer.adjust_for_ambient_noise(source, duration=1)               #removing noise
@@ -174,8 +177,8 @@ def main():
             
                 with st.spinner("Listening......"):
                     user_input=listen_to_speech()
-
-                    if user_input and user_input not in ["Sorry, I do not catch you","Speech Service is not available"]:
+                    if user_input:
+                    # if user_input and user_input not in ["Sorry, I do not catch you","Speech Service is not available"]:
                         # st.session_state.messages.append({"role":"user", "content":user_input})
                         st.session_state.messages.insert(0, {"role":"user", "content":user_input})
                         st.session_state.chat_history.append({"role":"user", "content":user_input})
