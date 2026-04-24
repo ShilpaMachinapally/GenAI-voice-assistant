@@ -25,6 +25,8 @@ from dotenv import load_dotenv
 load_dotenv()
 GROQ_API_KEY=os.getenv("GROQ_API_KEY")
 
+IS_CLOUD = os.getenv("STREAMLIT_SERVER_PORT") is not None  #exttra
+
 #checking if API key is uploaded successfully or not
 if not GROQ_API_KEY:
     st.error("Missing API key")
@@ -160,26 +162,35 @@ def main():
 
         )
 
-        if st.button("Start Voice Input",use_container_width=True,type='primary'):
-            with st.spinner("Listening......"):
-                user_input=listen_to_speech()
 
-                if user_input and user_input not in ["Sorry, I do not catch you","Speech Service is not available"]:
-                    # st.session_state.messages.append({"role":"user", "content":user_input})
-                    st.session_state.messages.insert(0, {"role":"user", "content":user_input})
-                    st.session_state.chat_history.append({"role":"user", "content":user_input})
+        if IS_CLOUD:
+            st.warning("🎤 Voice input works only on laptop. Please use text input.")
+        else:
 
 
-                    with st.spinner("Thinking...."):
-                        ai_response=get_ai_response(st.session_state.chat_history)
-                        # st.session_state.messages.append({"role":"assistant", "content":ai_response})
-                        st.session_state.messages.insert(1, {"role":"assistant", "content":ai_response})
-                        st.session_state.chat_history.append({"role":"assistant", "content":ai_response})
 
-                    if tts_enabled:
-                        speak(ai_response,voice_gender)
+            if st.button("Start Voice Input",use_container_width=True,type='primary'):
 
-                    st.rerun()
+            
+                with st.spinner("Listening......"):
+                    user_input=listen_to_speech()
+
+                    if user_input and user_input not in ["Sorry, I do not catch you","Speech Service is not available"]:
+                        # st.session_state.messages.append({"role":"user", "content":user_input})
+                        st.session_state.messages.insert(0, {"role":"user", "content":user_input})
+                        st.session_state.chat_history.append({"role":"user", "content":user_input})
+
+
+                        with st.spinner("Thinking...."):
+                            ai_response=get_ai_response(st.session_state.chat_history)
+                            # st.session_state.messages.append({"role":"assistant", "content":ai_response})
+                            st.session_state.messages.insert(1, {"role":"assistant", "content":ai_response})
+                            st.session_state.chat_history.append({"role":"assistant", "content":ai_response})
+
+                        if tts_enabled:
+                            speak(ai_response,voice_gender)
+
+                        st.rerun()
 
                 st.markdown("-----")
 
